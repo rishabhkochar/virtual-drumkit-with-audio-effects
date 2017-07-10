@@ -236,7 +236,14 @@ tr {
   cursor: pointer;
 }
 
+.hsangeet {
+  font-size: 40px;
+  font-weight: bold;
 
+  background: -webkit-linear-gradient(red, indigo);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+}
 
 
 
