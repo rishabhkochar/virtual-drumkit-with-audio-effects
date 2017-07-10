@@ -21,8 +21,16 @@ h1 {
 .wrapper {
     height: 100%;
     width: 100%;
-    background-color: #BBB;
+    background: url(http://awesomwallpaper.com/img1/D87169DA5985/music-dark.jpg);
+    background-size: cover;
 }
+
+input {
+     border: 0;
+     padding: 8px;
+     font-size: 15px;
+   }
+
 
 .welcome-screen {
     height: 100%;
@@ -164,3 +172,92 @@ h1 {
 .song-length {
     text-align: right;
 }
+
+.content {
+    position: relative;
+}
+.current-song-wrapper {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+}
+
+.current-song-image {
+    height: 100px;
+    width: 100px;
+    margin-right: 1rem;
+}
+
+.current-song-name {
+    font-size: 1.4rem;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.current-song-album {
+    margin-top: 0.4rem;
+}
+
+select {
+  display: none;
+}
+
+.player-buttons .fa {
+    margin-right: 3rem;
+}
+
+.fa.disabled {
+    color: gray;
+}
+
+a {
+  text-decoration: none;
+  /*padding-right: 3rem;*/
+  /*color: #AEB6BF;*/
+  /*color: linear-gradient(red, yellow);*/
+   background: -webkit-linear-gradient(red, grey);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  left: 3rem;
+  bottom: 25px;
+
+  position: absolute;
+
+}
+
+.welcome-screen h1 {
+   font-size: 40px;
+   background: -webkit-linear-gradient(#C0392B, grey);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+tr {
+  cursor: pointer;
+}
+
+
+
+
+
+
+/*DataTables overrides*/
+table.dataTable tbody tr {
+background-color: initial;
+}
+#songs_info {
+display: none;
+}
+
+#songs_filter {
+color: transparent;
+}
+#songs_filter input {
+    width: 400px;
+    margin-bottom: 1rem;
+    font-size: 16px;
+}
+
+One Last Thing. Let's turn off the page count. This doesn't look nice
+POWER OF PLUGINS
+Now we can sort any song by paramter just by clicking on its heading

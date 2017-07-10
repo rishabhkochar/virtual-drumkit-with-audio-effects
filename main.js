@@ -1,3 +1,176 @@
+ var songNumber = 1;
+ var currentSongNumber = 1;
+var willLoop = 0;
+var willShuffle = 0; // will use this soon
+
+var songs = [
+  {
+    'name': 'Aashiq Surrender',
+    'artist': 'Shreya Ghoshal, Ammal Malik',
+    'album': 'Badrinath ki Dulhania',
+    'duration': '4:10',
+    'fileName': 'song4.mp3',
+    'image' : 'song1.jpg'
+  },
+
+{
+  'name': 'Badri Ki Dulhania (Title Track)',
+  'artist': 'Neha Kakkar, Monali Thakur, Ikka Singh, Dev Negi',
+  'album': 'Badrinath ki Dulhania',
+  'duration': '3:26',
+  'fileName': 'song1.mp3',
+  'image' : 'song1.jpg'
+
+},
+{
+  'name': 'Ding Dang',
+  'artist': 'Antara Mitra, Amit Mishra',
+  'album': 'Munna Michael',
+  'duration': '3:22',
+  'fileName': 'song3.mp3',
+  'image' : 'song3.jpg'
+},
+{
+  'name': 'Gulabi 2.0',
+  'artist': 'Tulsi Kumar, Amaal Malik, Yash Narvekar',
+  'album': 'Noor',
+  'duration': '3:32',
+  'fileName': 'song5.mp3',
+  'image' : 'song5.jpg'
+},
+{
+  'name': 'Radio',
+  'artist': 'Amit Mishra, Pritam Chakraborty, Kamaal Khan',
+  'album': 'Tubelight',
+  'duration': '4:39',
+  'fileName': 'song2.mp3',
+  'image' : 'song2.jpg'
+},
+]
+
+
+$('.fa-repeat').on('click',function() {
+    $('.fa-repeat').toggleClass('disabled')
+    willLoop = 1 - willLoop;
+});
+
+$('.fa-random').on('click',function() {
+    $('.fa-random').toggleClass('disabled')
+    willShuffle = 1 - willShuffle;
+ });
+
+function timeJump() {
+    var song = document.querySelector('audio')
+    song.currentTime = song.duration - 5;
+}
+
+// $('audio').on('ended',function() {
+//     var audio = document.querySelector('audio');
+//     if(currentSongNumber < 5) {
+//         var nextSongObj = songs[currentSongNumber];
+//        audio.src = nextSongObj.fileName; // Change Soure
+//         toggleSong(); // Play Next Song
+//         changeCurrentSongDetails(nextSongObj); // Update Image
+//         currentSongNumber = currentSongNumber + 1; // Change State
+//     }
+//     else if(willLoop == 1) {
+//         var nextSongObj = songs[0];
+//         audio.src = nextSongObj.fileName;
+//         toggleSong();
+//         changeCurrentSongDetails(nextSongObj);
+//         currentSongNumber =  1;
+//     }
+//     else {
+//         $('.play-icon').removeClass('fa-pause').addClass('fa-play');
+//         audio.currentTime = 0;
+//     }
+// })
+
+$('audio').on('ended',function() {
+    var audio = document.querySelector('audio');
+    if (willShuffle == 1) {
+        var nextSongNumber = randomExcluded(1,5,currentSongNumber); // Calling our function from Stackoverflow
+        var nextSongObj = songs[nextSongNumber-1];
+        audio.src = nextSongObj.fileName;
+        toggleSong();
+        changeCurrentSongDetails(nextSongObj);
+        currentSongNumber = nextSongNumber;
+    }
+    else if(currentSongNumber < 5) {
+        var nextSongObj = songs[currentSongNumber];
+        audio.src = nextSongObj.fileName;
+        toggleSong();
+        changeCurrentSongDetails(nextSongObj);
+        currentSongNumber = currentSongNumber + 1;
+    }
+    else if(willLoop == 1) {
+        var nextSongObj = songs[0];
+        audio.src = nextSongObj.fileName;
+        toggleSong();
+        changeCurrentSongDetails(nextSongObj);
+        currentSongNumber =  1;
+    }
+    else {
+        $('.play-icon').removeClass('fa-pause').addClass('fa-play');
+        audio.currentTime = 0;
+    }
+})
+
+
+// Code for the 'Next' button.
+$('.fa-step-forward').on('click', function() {
+  var audio = document.querySelector('audio');
+  if(currentSongNumber < songs.length) {
+    currentSongNumber++;
+    var nextSongObj = songs[currentSongNumber - 1];
+    audio.src = nextSongObj.fileName;
+    toggleSong();
+    changeCurrentSongDetails(nextSongObj);
+  }
+  else {
+    currentSongNumber = 1;
+    audio.src = songs[0].fileName;
+    toggleSong();
+    changeCurrentSongDetails(songs[0]);
+  }
+});
+
+// Code for the 'Previous' button.
+$('.fa-step-backward').on('click', function() {
+  var audio = document.querySelector('audio');
+  if(currentSongNumber >= 1) {
+    currentSongNumber--;
+    var prevSongObj = songs[currentSongNumber - 1];
+    audio.src = prevSongObj.fileName;
+    toggleSong();
+    changeCurrentSongDetails(prevSongObj);
+  }
+  else {
+    currentSongNumber = songs.length;
+    audio.src = songs[currentSongNumber - 1].fileName;
+    toggleSong();
+    changeCurrentSongDetails(songs[currentSongNumber - 1]);
+  }
+});
+
+
+
+//update progress bar
+$('audio').on('timeupdate', function() {
+  var audio = document.querySelector('audio');
+  $('.progress-filled').stop().animate({'width': (audio.currentTime) / audio.duration * 100 + '%'}, 250, 'linear');
+});
+
+// The 'scrub' function: it updates the current time whenever the user clicks
+// anywhere on the progress bar.
+$('.player-progress').on('click', function(event) {
+  var audio = document.querySelector('audio');
+  var progress = document.querySelector('.player-progress');
+
+  var scrubTime = (event.offsetX / progress.offsetWidth) * audio.duration;
+  audio.currentTime = scrubTime;
+});
+
 
     function toggleSong() {
     var song = document.querySelector('audio');
@@ -29,28 +202,52 @@
         toggleSong();
     });
 
-    $('body').on('keypress', function(event) {
-        if (event.keyCode == 32) {
-            toggleSong()
-        }
-    });
+    // $('body').on('keypress', function(event) {
+    //     if (event.keyCode == 32) {
+    //         toggleSong()
+    //     }
+    // });
 
-
-    function addSongNameClickEvent(songName,position) {
-      var id = "#song" + position;
-    $(id).click(function() {
-    var audio = document.querySelector('audio');
-    var currentSong = audio.src;
-    if(currentSong.search(songName) != -1)
+    $('body').on('keypress',function(event) {
+    var target = event.target;
+    if (event.keyCode == 32 && target.tagName !='INPUT')
     {
-    toggleSong();
-    }
-    else {
-    audio.src = songName;
-    toggleSong();
+        toggleSong();
     }
     });
-    }
+
+
+    // function addSongNameClickEvent(songName,position) {
+    //   var id = "#song" + position;
+    // $(id).click(function() {
+    // var audio = document.querySelector('audio');
+    // var currentSong = audio.src;
+    // if(currentSong.search(songName) != -1)
+    // {
+    // toggleSong();
+    // }
+    // else {
+    // audio.src = songName;
+    // toggleSong();
+    // }
+    // });
+    // }
+
+    function addSongNameClickEvent(songObj,position) {
+      var songName = songObj.fileName;
+       var id = "#song" + position;
+     $(id).click(function() {
+     var audio = document.querySelector('audio');
+     var currentSong = audio.src;
+     if(songNumber !== position)
+     {
+        audio.src = songName;
+        songNumber = position;
+         changeCurrentSongDetails(songObj); // Function Call
+     }
+      toggleSong();
+     });
+     }
 
 
     function fancyTimeFormat(time)
@@ -82,7 +279,18 @@
       $('.song-duration').text(duration);
     }
 
+    function changeCurrentSongDetails(songObj) {
+        $('.current-song-image').attr('src','img/' + songObj.image)
+        $('.current-song-name').text(songObj.name)
+        $('.current-song-album').text(songObj.album)
+    }
+
+
+
     window.onload = function() {
+
+
+
       updateCurrentTime();
       setInterval(function() {
       updateCurrentTime();
@@ -99,42 +307,15 @@
       // var albumList = ['Badrinath ki Dulhania','Ok Jaanu','Befikre','Ae Dil Hai Mushkil','sgaeg'];
       // var durationList = ['2:56','3:15','2:34','2:29','2:66'];
 
-      var songs = [{
-        'name': 'Badri Ki Dulhania (Title Track)',
-        'artist': 'Neha Kakkar, Monali Thakur, Ikka Singh, Dev Negi',
-        'album': 'Badrinath ki Dulhania',
-        'duration': '3:26',
-       'fileName': 'song1.mp3'
-    },
-    {
-        'name': 'Radio',
-        'artist': 'Amit Mishra, Pritam Chakraborty, Kamaal Khan',
-        'album': 'Tubelight',
-        'duration': '4:39',
-        'fileName': 'song2.mp3'
-    },
-    {
-        'name': 'Ding Dang',
-        'artist': 'Antara Mitra, Amit Mishra',
-        'album': 'Munna Michael',
-        'duration': '3:22',
-        'fileName': 'song3.mp3'
-    },
-    {
-        'name': 'Aashiq Surrender',
-        'artist': 'Shreya Ghoshal, Ammal Malik',
-        'album': 'Badrinath ki Dulhania',
-        'duration': '4:10',
-        'fileName': 'song4.mp3'
-    },
-    {
-        'name': 'Gulabi 2.0',
-        'artist': 'Amaal Malik, Tulsi Kumar, Yash Narvekar',
-        'album': 'Noor',
-        'duration': '3:32',
-        'fileName': 'song5.mp3'
-    }
-  ]
+
+
+
+
+
+
+
+
+    changeCurrentSongDetails(songs[0]);
       // $('#song1 .song-name').text(songList[0]);
       // $('#song2 .song-name').text(songList[1]);
       // $('#song3 .song-name').text(songList[2]);
@@ -151,8 +332,13 @@
       song.find('.song-artist').text(obj.artist);
       song.find('.song-album').text(obj.album);
       song.find('.song-length').text(obj.duration);
-      addSongNameClickEvent(obj.fileName,i+1)
+      addSongNameClickEvent(obj,i+1)
       }
+
+      $('#songs').DataTable({
+      paging: false
+    });
+
 
     //   var fileNames = ['song1.mp3','song2.mp3','song3.mp3','song4.mp3', 'song5.mp3'];
     //
