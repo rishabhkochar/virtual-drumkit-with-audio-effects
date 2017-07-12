@@ -240,7 +240,7 @@ tr {
   font-size: 40px;
   font-weight: bold;
 
-  background: -webkit-linear-gradient(red, indigo);
+  background: -webkit-linear-gradient(white, grey);
    -webkit-background-clip: text;
    -webkit-text-fill-color: transparent;
 }

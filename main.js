@@ -155,6 +155,7 @@ $('.fa-step-backward').on('click', function() {
 
 
 
+
 //update progress bar
 $('audio').on('timeupdate', function() {
   var audio = document.querySelector('audio');
@@ -216,6 +217,7 @@ $('.player-progress').on('click', function(event) {
     }
     });
 
+  
 
     // function addSongNameClickEvent(songName,position) {
     //   var id = "#song" + position;
